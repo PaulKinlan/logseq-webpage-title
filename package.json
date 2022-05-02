@@ -1,0 +1,22 @@
+{
+  "name": "logseq-webpage-title",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "main": "dist/index.html",
+  "devDependencies": {
+    "@logseq/libs": "latest",
+    "vite": "^2.9.5"
+  },
+  "logseq": {
+    "id": "kinlan_page_title-im3ruv4ub"
+  },
+  "dependencies": {
+    "get-urls": "^11.0.0",
+    "vite-plugin-logseq": "^1.1.2"
+  },
+  "license": "Apache-2.0"
+}
