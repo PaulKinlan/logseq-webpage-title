@@ -1,6 +1,6 @@
-# Page Title
+# Get Webpage title
 
-This Logseq plugin will extract the title of a web page and wrap the URL in markdown syntax to make it a little easier to read.
+This logseq plugin will extract the title of a web page and wrap the URL in markdown syntax to make it a little easier to read.
 
 Simply type `/title` in the block and it will find the first link after the command and wrap it.
 
