@@ -12,19 +12,19 @@
    limitations under the License.
 */
 import "@logseq/libs";
-import getUrls from 'get-urls';
+import getUrls from "get-urls";
 
 function main() {
   logseq.Editor.registerSlashCommand("Title", async () => {
     const text = await logseq.Editor.getEditingBlockContent();
-    const {uuid} = await logseq.Editor.getCurrentBlock();
-    const {pos} = await logseq.Editor.getEditingCursorPosition();
+    const { uuid } = await logseq.Editor.getCurrentBlock();
+    const { pos } = await logseq.Editor.getEditingCursorPosition();
 
     // Find the first URL after the command.
     const [before, after] = [text.slice(0, pos), text.slice(pos)];
     const urls = getUrls(after);
 
-    if(urls.size >= 1) {
+    if (urls.size >= 1) {
       // Just get the first URL
       const url = urls.keys().next().value;
       const response = await fetch(url);
@@ -35,7 +35,6 @@ function main() {
         const newBlockText = before + after.replace(url, `[${title}](${url})`);
         logseq.Editor.updateBlock(uuid, newBlockText);
       }
-
     }
   });
 }
