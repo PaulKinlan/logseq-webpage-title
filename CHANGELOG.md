@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.2...v1.0.3) (2022-05-09)
+
+
+### Bug Fixes
+
+* **url filter:** will now find urls and not change them. ([84eccab](https://github.com/PaulKinlan/logseq-webpage-title/commit/84eccab7ed19438592859b155c87d718103df32e))
+
 ## [1.0.2](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.1...v1.0.2) (2022-05-09)
 
 
