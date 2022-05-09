@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.3...v1.0.4) (2022-05-09)
+
+
+### Bug Fixes
+
+* **oops:** It's not using a set anymore ([d3239f5](https://github.com/PaulKinlan/logseq-webpage-title/commit/d3239f5b8bfb40dfdbe87a8b2f7674ac983083ee))
+
 ## [1.0.3](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.2...v1.0.3) (2022-05-09)
 
 
