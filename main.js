@@ -12,7 +12,7 @@
    limitations under the License.
 */
 import "@logseq/libs";
-import getUrls from "get-urls";
+import urlRegex from "url-regex";
 
 function main() {
   logseq.Editor.registerSlashCommand("Title", async () => {
@@ -22,16 +22,9 @@ function main() {
 
     // Find the first URL after the command.
     const [before, after] = [text.slice(0, pos), text.slice(pos)];
-    const urls = getUrls(after, {
-      removeTrailingSlash: false,
-      stripWWW: false,
-      removeSingleSlash: false,
-      stripTextFragment: false,
-      removeQueryParameters: false,
-      sortQueryParameters: false,
-    });
+    const urls = after.match(urlRegex());
 
-    if (urls.size >= 1) {
+    if (urls.length >= 1) {
       // Just get the first URL
       const url = urls.keys().next().value;
       const response = await fetch(url);
