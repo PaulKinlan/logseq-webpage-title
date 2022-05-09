@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.1...v1.0.2) (2022-05-09)
+
+
+### Bug Fixes
+
+* **normalize:** Tries to leave the URL as much as possible so that they can be replaced. fixes [#7](https://github.com/PaulKinlan/logseq-webpage-title/issues/7) ([ab8c984](https://github.com/PaulKinlan/logseq-webpage-title/commit/ab8c984242eef0a5bd72cfe90783e369379e0d9b))
+* **title new lines:** Times white space and new-lines on the title. ([eab1d89](https://github.com/PaulKinlan/logseq-webpage-title/commit/eab1d8997ca748d1db7bea9e9d8aafe784f1119e)), closes [#5](https://github.com/PaulKinlan/logseq-webpage-title/issues/5)
+
 ## [1.0.1](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.0...v1.0.1) (2022-05-09)
 
 
