@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.0...v1.0.1) (2022-05-09)
+
+
+### Bug Fixes
+
+* **no title:** If there is no title, don't error. fixes [#1](https://github.com/PaulKinlan/logseq-webpage-title/issues/1) ([730f3f7](https://github.com/PaulKinlan/logseq-webpage-title/commit/730f3f770dd07ce19f227427efd4d4f305a26230))
+* **trailing slash:** overides getUrls to use removeTrailingSlash: false ([25091af](https://github.com/PaulKinlan/logseq-webpage-title/commit/25091afcc73d6a2c016bda6e7db923a6f5380840))
+
 # 1.0.0 (2022-05-04)
 
 
