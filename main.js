@@ -22,7 +22,7 @@ function main() {
 
     // Find the first URL after the command.
     const [before, after] = [text.slice(0, pos), text.slice(pos)];
-    const urls = getUrls(after);
+    const urls = getUrls(after, { removeTrailingSlash: false });
 
     if (urls.size >= 1) {
       // Just get the first URL
@@ -30,7 +30,7 @@ function main() {
       const response = await fetch(url);
       const responseText = await response.text();
       const matches = responseText.match(/<title>([^<]*)<\/title>/);
-      if (matches.length > 1) {
+      if (matches !== null && matches.length > 1) {
         const title = matches[1];
         const newBlockText = before + after.replace(url, `[${title}](${url})`);
         logseq.Editor.updateBlock(uuid, newBlockText);
