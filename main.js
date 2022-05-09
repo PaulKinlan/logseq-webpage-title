@@ -22,7 +22,7 @@ function main() {
 
     // Find the first URL after the command.
     const [before, after] = [text.slice(0, pos), text.slice(pos)];
-    const urls = getUrls(after);
+    const urls = getUrls(after, { removeTrailingSlash: false });
 
     if (urls.size >= 1) {
       // Just get the first URL
