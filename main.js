@@ -26,7 +26,7 @@ function main() {
 
     if (urls.length >= 1) {
       // Just get the first URL
-      const url = urls.keys().next().value;
+      const url = urls[0];
       const response = await fetch(url);
       const responseText = await response.text();
       const matches = responseText.match(/<title>([^<]*)<\/title>/);
