@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.1.0...v1.2.0) (2022-05-10)
+
+
+### Features
+
+* **before:** Adds before url ([4c5e08f](https://github.com/PaulKinlan/logseq-webpage-title/commit/4c5e08fe9502707272c04ace721170fc3ef2db78))
+
 # [1.1.0](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.4...v1.1.0) (2022-05-10)
 
 
