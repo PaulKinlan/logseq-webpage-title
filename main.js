@@ -26,11 +26,83 @@ async function getTitle(url) {
   return title;
 }
 
+async function replaceTitle(url, text, urlIndex, offset) {
+  const title = await getTitle(url);
+  if (title != "") {
+    const start = text.slice(0, urlIndex);
+    const linkifiedUrl = `[${title}](${url})`;
+    const end = text.slice(urlIndex + url.length);
+    text = `${start}${linkifiedUrl}${end}`;
+    offset = urlIndex + url.length;
+  }
+  return { text, offset };
+}
+
+const replaceTitleAfterCommand = async ({ uuid }) => {
+  const { content } = await logseq.Editor.getBlock(uuid);
+  const { pos } = await logseq.Editor.getEditingCursorPosition();
+
+  let text = content;
+
+  // Get's all the urls.
+  const urls = text.slice(0).match(urlRegex());
+  let offset = 0;
+
+  // Find all the URL's in the text, then find the first non-markdown and convert. Then finish.
+
+  for (const url of urls) {
+    const urlIndex = text.indexOf(url, offset);
+    if (
+      text.slice(urlIndex - 2, urlIndex) != "](" ||
+      text.slice(urlIndex + url.length, urlIndex + url.length + 1) != ")"
+    ) {
+      // It's a URL that's not wrapped
+      ({ text, offset } = await replaceTitle(url, text, urlIndex, offset));
+      await logseq.Editor.updateBlock(uuid, text);
+      return;
+    }
+    // move down the rest of the string.
+    offset = urlIndex + url.length;
+  }
+};
+
+const replaceTitleBeforeCommand = async ({ uuid }) => {
+
+  // ISSUE - sometimes if you are really quick the block won't be committed yet.
+  const { content } = await logseq.Editor.getBlock(uuid);
+  const { pos } = await logseq.Editor.getEditingCursorPosition();
+
+  let text = content;
+
+  // Get's all the urls.
+  const urls = text.slice(0, pos).match(urlRegex());
+  urls.reverse();
+
+  let offset = 0;
+
+  // Find all the URL's in the text, then find the last non-markdown and convert. Then finish.
+
+  for (let url of urls) {
+    // HACK
+    url = url.replace(/\)$/,"");
+    const urlIndex = text.lastIndexOf(url);
+    if (
+      text.slice(urlIndex - 2, urlIndex) != "](" ||
+      text.slice(urlIndex + url.length, urlIndex + url.length + 1) != ")"
+    ) {
+      // It's a URL that's not wrapped.
+      ({ text, offset } = await replaceTitle(url, text, urlIndex, offset));
+      await logseq.Editor.updateBlock(uuid, text);
+      return;
+    }
+  }
+};
+
 function main() {
   logseq.Editor.registerBlockContextMenuItem(
     "Get Link Titles",
-    async ({ uuid,blockId }) => {
-      const {content} = await logseq.Editor.getBlock(uuid);
+    async ({ uuid }) => {
+      const { content } = await logseq.Editor.getBlock(uuid);
       let text = content;
 
       // Get's all the urls.
@@ -44,14 +116,7 @@ function main() {
           text.slice(urlIndex + url.length, urlIndex + url.length + 1) != ")"
         ) {
           // It's a URL that's not wrapped
-          const title = await getTitle(url);
-          if (title != "") {
-            const start = text.slice(0, urlIndex);
-            const linkifiedUrl = `[${title}](${url})`;
-            const end = text.slice(urlIndex + url.length);
-            text = `${start}${linkifiedUrl}${end}`;
-            offset = urlIndex + url.length;
-          }
+          ({ text, offset } = await replaceTitle(url, text, urlIndex, offset));
         }
       }
 
@@ -59,24 +124,16 @@ function main() {
     }
   );
 
-  logseq.Editor.registerSlashCommand("Title", async ({ uuid }) => {
-    const text = await logseq.Editor.getEditingBlockContent();
-    const { pos } = await logseq.Editor.getEditingCursorPosition();
+  logseq.Editor.registerSlashCommand("Title", replaceTitleAfterCommand);
+  logseq.Editor.registerSlashCommand(
+    "Title After Cursor",
+    replaceTitleAfterCommand
+  );
 
-    // Find the first URL after the command.
-    const [before, after] = [text.slice(0, pos), text.slice(pos)];
-    const urls = after.match(urlRegex());
-
-    if (urls.length >= 1) {
-      // Just get the first URL
-      const url = urls[0];
-      const title = await getTitle(url);
-      if (title != "") {
-        const newBlockText = before + after.replace(url, `[${title}](${url})`);
-        await logseq.Editor.updateBlock(uuid, newBlockText);
-      }
-    }
-  });
+  logseq.Editor.registerSlashCommand(
+    "Title Before Cursor",
+    replaceTitleBeforeCommand
+  );
 }
 
 // bootstrap
