@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.4...v1.1.0) (2022-05-10)
+
+
+### Features
+
+* **context menu:** Right click on block and now you can convert all links ([a31bc6c](https://github.com/PaulKinlan/logseq-webpage-title/commit/a31bc6c2f0d5e20a6e2ccc9046913a0bc255fc30))
+
 ## [1.0.4](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.0.3...v1.0.4) (2022-05-09)
 
 
