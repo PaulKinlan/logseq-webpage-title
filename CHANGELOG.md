@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.2.0...v1.2.1) (2022-05-16)
+
+
+### Bug Fixes
+
+* **title with attributes:** fixes when a title might have attr. ([c027779](https://github.com/PaulKinlan/logseq-webpage-title/commit/c02777975735ce0c9d5f8bf1cf1809b0da15152f))
+
 # [1.2.0](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.1.0...v1.2.0) (2022-05-10)
 
 
