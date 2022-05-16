@@ -19,9 +19,11 @@ async function getTitle(url) {
 
   const response = await fetch(url);
   const responseText = await response.text();
-  const matches = responseText.match(/<title>([^<]*)<\/title>/);
+  const matches = responseText.match(/<title(\s[^>]+)*>([^<]*)<\/title>/);
   if (matches !== null && matches.length > 1) {
-    title = matches[1].trim();
+    if(matches[2] != null) {
+      title = matches[2].trim();
+    }
   }
   return title;
 }
