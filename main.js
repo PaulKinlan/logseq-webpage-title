@@ -21,10 +21,15 @@ async function getTitle(url) {
   const responseText = await response.text();
   const matches = responseText.match(/<title(\s[^>]+)*>([^<]*)<\/title>/);
   if (matches !== null && matches.length > 1) {
-    if(matches[2] != null) {
+    if (matches[2] != null) {
       title = matches[2].trim();
     }
   }
+
+  if (title === "") {
+    logseq.UI.showMsg(`No title found for ${url}`);
+  }
+
   return title;
 }
 
@@ -69,7 +74,6 @@ const replaceTitleAfterCommand = async ({ uuid }) => {
 };
 
 const replaceTitleBeforeCommand = async ({ uuid }) => {
-
   // ISSUE - sometimes if you are really quick the block won't be committed yet.
   const { content } = await logseq.Editor.getBlock(uuid);
   const { pos } = await logseq.Editor.getEditingCursorPosition();
@@ -86,7 +90,7 @@ const replaceTitleBeforeCommand = async ({ uuid }) => {
 
   for (let url of urls) {
     // HACK
-    url = url.replace(/\)$/,"");
+    url = url.replace(/\)$/, "");
     const urlIndex = text.lastIndexOf(url);
     if (
       text.slice(urlIndex - 2, urlIndex) != "](" ||
