@@ -36,8 +36,14 @@ async function getTitle(url) {
 async function replaceTitle(url, text, urlIndex, offset) {
   const title = await getTitle(url);
   if (title != "") {
+    const { preferredFormat } = await logseq.App.getUserConfigs();
     const start = text.slice(0, urlIndex);
-    const linkifiedUrl = `[${title}](${url})`;
+    let linkifiedUrl = url; // If there is a new configuration option that we can't handle then just keep the URL.
+    if (preferredFormat === "markdown") {
+      linkifiedUrl = `[${title}](${url})`;
+    } else if (preferredFormat === "org") {
+      linkifiedUrl = `[[${url}][${title}]]`;
+    }
     const end = text.slice(urlIndex + url.length);
     text = `${start}${linkifiedUrl}${end}`;
     offset = urlIndex + url.length;
