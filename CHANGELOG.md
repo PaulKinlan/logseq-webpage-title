@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.2.1...v1.2.2) (2022-05-24)
+
+
+### Bug Fixes
+
+* **org-mode:** if org mode, linkify that way. ([ef37c2c](https://github.com/PaulKinlan/logseq-webpage-title/commit/ef37c2c0e95ed38e978a8e406ddaaa84c0c30a79))
+
 ## [1.2.1](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.2.0...v1.2.1) (2022-05-16)
 
 
