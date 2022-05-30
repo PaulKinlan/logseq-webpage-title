@@ -51,6 +51,33 @@ async function replaceTitle(url, text, urlIndex, offset) {
   return { text, offset };
 }
 
+const replaceAllTitle = async ({ uuid }) => {
+  const { content } = await logseq.Editor.getBlock(uuid);
+
+  let text = content;
+
+  // Get's all the urls.
+  const urls = text.slice(0).match(urlRegex());
+  let offset = 0;
+
+  // Find all the URL's in the text, then find the first non-markdown and convert. Then finish.
+
+  for (const url of urls) {
+    const urlIndex = text.indexOf(url, offset);
+    if (
+      text.slice(urlIndex - 2, urlIndex) != "](" ||
+      text.slice(urlIndex + url.length, urlIndex + url.length + 1) != ")"
+    ) {
+      // It's a URL that's not wrapped
+      ({ text, offset } = await replaceTitle(url, text, urlIndex, offset));
+      await logseq.Editor.updateBlock(uuid, text);
+      return;
+    }
+    // move down the rest of the string.
+    offset = urlIndex + url.length;
+  }
+};
+
 const replaceTitleAfterCommand = async ({ uuid }) => {
   const { content } = await logseq.Editor.getBlock(uuid);
   const { pos } = await logseq.Editor.getEditingCursorPosition();
@@ -58,7 +85,7 @@ const replaceTitleAfterCommand = async ({ uuid }) => {
   let text = content;
 
   // Get's all the urls.
-  const urls = text.slice(0).match(urlRegex());
+  const urls = text.slice(pos).match(urlRegex());
   let offset = 0;
 
   // Find all the URL's in the text, then find the first non-markdown and convert. Then finish.
@@ -136,7 +163,7 @@ function main() {
     }
   );
 
-  logseq.Editor.registerSlashCommand("Title", replaceTitleAfterCommand);
+  logseq.Editor.registerSlashCommand("Title", replaceAllTitle);
   logseq.Editor.registerSlashCommand(
     "Title After Cursor",
     replaceTitleAfterCommand
