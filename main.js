@@ -24,7 +24,7 @@ async function getTitle(url) {
 
   const response = await fetch(url);
   const responseText = await response.text();
-  const matches = responseText.match(/<title(\\s[^>]+)*>([^<]*)<\\/title>/);
+  const matches = responseText.match(/<title(\s[^>]+)*>([^<]*)<\/title>/);
   if (matches !== null && matches.length > 1) {
     if (matches[2] != null) {
       title = decodeHTML(matches[2].trim());
