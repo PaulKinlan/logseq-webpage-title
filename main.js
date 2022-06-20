@@ -128,7 +128,7 @@ const replaceTitleBeforeCommand = async ({ uuid }) => {
 
   for (let url of urls) {
     // HACK
-    url = url.replace(/\\)\$/, "");
+    url = url.replace(/\)$/, "");
     const urlIndex = text.lastIndexOf(url);
     if (
       text.slice(urlIndex - 2, urlIndex) != "](" ||
