@@ -14,45 +14,50 @@
 import "@logseq/libs";
 import urlRegex from "url-regex";
 
+function decodeHTML(input) {
+  var doc = new DOMParser().parseFromString(input, "text/html");
+  return doc.documentElement.textContent;
+\}
+
 async function getTitle(url) {
   let title = "";
 
   const response = await fetch(url);
   const responseText = await response.text();
-  const matches = responseText.match(/<title(\s[^>]+)*>([^<]*)<\/title>/);
+  const matches = responseText.match(/<title(\\s[^>]+)*>([^<]*)<\\/title>/);
   if (matches !== null && matches.length > 1) {
     if (matches[2] != null) {
-      title = matches[2].trim();
-    }
-  }
+      title = decodeHTML(matches[2].trim());
+    \}
+  \}
 
   if (title === "") {
-    logseq.UI.showMsg(`No title found for ${url}`);
-  }
+    logseq.UI.showMsg(`No title found for \${url\}`);
+  \}
 
   return title;
-}
+\}
 
 async function replaceTitle(url, text, urlIndex, offset) {
   const title = await getTitle(url);
   if (title != "") {
-    const { preferredFormat } = await logseq.App.getUserConfigs();
+    const { preferredFormat \} = await logseq.App.getUserConfigs();
     const start = text.slice(0, urlIndex);
     let linkifiedUrl = url; // If there is a new configuration option that we can't handle then just keep the URL.
     if (preferredFormat === "markdown") {
-      linkifiedUrl = `[${title}](${url})`;
-    } else if (preferredFormat === "org") {
-      linkifiedUrl = `[[${url}][${title}]]`;
-    }
+      linkifiedUrl = `[\${title\}](\${url\})`;
+    \} else if (preferredFormat === "org") {
+      linkifiedUrl = `[[\${url\}][\${title\}]]`;
+    \}
     const end = text.slice(urlIndex + url.length);
-    text = `${start}${linkifiedUrl}${end}`;
+    text = `\${start\}\${linkifiedUrl\}\${end\}`;
     offset = urlIndex + url.length;
-  }
-  return { text, offset };
-}
+  \}
+  return { text, offset \};
+\}
 
-const replaceAllTitle = async ({ uuid }) => {
-  const { content } = await logseq.Editor.getBlock(uuid);
+const replaceAllTitle = async ({ uuid \}) => {
+  const { content \} = await logseq.Editor.getBlock(uuid);
 
   let text = content;
 
@@ -69,18 +74,18 @@ const replaceAllTitle = async ({ uuid }) => {
       text.slice(urlIndex + url.length, urlIndex + url.length + 1) != ")"
     ) {
       // It's a URL that's not wrapped
-      ({ text, offset } = await replaceTitle(url, text, urlIndex, offset));
+      ({ text, offset \} = await replaceTitle(url, text, urlIndex, offset));
       await logseq.Editor.updateBlock(uuid, text);
       return;
-    }
+    \}
     // move down the rest of the string.
     offset = urlIndex + url.length;
-  }
-};
+  \}
+\};
 
-const replaceTitleAfterCommand = async ({ uuid }) => {
-  const { content } = await logseq.Editor.getBlock(uuid);
-  const { pos } = await logseq.Editor.getEditingCursorPosition();
+const replaceTitleAfterCommand = async ({ uuid \}) => {
+  const { content \} = await logseq.Editor.getBlock(uuid);
+  const { pos \} = await logseq.Editor.getEditingCursorPosition();
 
   let text = content;
 
@@ -97,19 +102,19 @@ const replaceTitleAfterCommand = async ({ uuid }) => {
       text.slice(urlIndex + url.length, urlIndex + url.length + 1) != ")"
     ) {
       // It's a URL that's not wrapped
-      ({ text, offset } = await replaceTitle(url, text, urlIndex, offset));
+      ({ text, offset \} = await replaceTitle(url, text, urlIndex, offset));
       await logseq.Editor.updateBlock(uuid, text);
       return;
-    }
+    \}
     // move down the rest of the string.
     offset = urlIndex + url.length;
-  }
-};
+  \}
+\};
 
-const replaceTitleBeforeCommand = async ({ uuid }) => {
+const replaceTitleBeforeCommand = async ({ uuid \}) => {
   // ISSUE - sometimes if you are really quick the block won't be committed yet.
-  const { content } = await logseq.Editor.getBlock(uuid);
-  const { pos } = await logseq.Editor.getEditingCursorPosition();
+  const { content \} = await logseq.Editor.getBlock(uuid);
+  const { pos \} = await logseq.Editor.getEditingCursorPosition();
 
   let text = content;
 
@@ -123,25 +128,25 @@ const replaceTitleBeforeCommand = async ({ uuid }) => {
 
   for (let url of urls) {
     // HACK
-    url = url.replace(/\)$/, "");
+    url = url.replace(/\\)\$/, "");
     const urlIndex = text.lastIndexOf(url);
     if (
       text.slice(urlIndex - 2, urlIndex) != "](" ||
       text.slice(urlIndex + url.length, urlIndex + url.length + 1) != ")"
     ) {
       // It's a URL that's not wrapped.
-      ({ text, offset } = await replaceTitle(url, text, urlIndex, offset));
+      ({ text, offset \} = await replaceTitle(url, text, urlIndex, offset));
       await logseq.Editor.updateBlock(uuid, text);
       return;
-    }
-  }
-};
+    \}
+  \}
+\};
 
 function main() {
   logseq.Editor.registerBlockContextMenuItem(
     "Get Link Titles",
-    async ({ uuid }) => {
-      const { content } = await logseq.Editor.getBlock(uuid);
+    async ({ uuid \}) => {
+      const { content \} = await logseq.Editor.getBlock(uuid);
       let text = content;
 
       // Get's all the urls.
@@ -155,12 +160,12 @@ function main() {
           text.slice(urlIndex + url.length, urlIndex + url.length + 1) != ")"
         ) {
           // It's a URL that's not wrapped
-          ({ text, offset } = await replaceTitle(url, text, urlIndex, offset));
-        }
-      }
+          ({ text, offset \} = await replaceTitle(url, text, urlIndex, offset));
+        \}
+      \}
 
       await logseq.Editor.updateBlock(uuid, text);
-    }
+    \}
   );
 
   logseq.Editor.registerSlashCommand("Title", replaceAllTitle);
@@ -173,7 +178,7 @@ function main() {
     "Title Before Cursor",
     replaceTitleBeforeCommand
   );
-}
+\}
 
 // bootstrap
 logseq.ready(main).catch(console.error);
