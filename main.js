@@ -14,6 +14,14 @@
 import "@logseq/libs";
 import urlRegex from "url-regex";
 
+function decodeHTML(input) {
+  if (input == undefined || input === "") {
+    return "";
+  }
+  const doc = new DOMParser().parseFromString(input, "text/html");
+  return doc.documentElement.textContent;
+}
+
 async function getTitle(url) {
   let title = "";
 
@@ -22,7 +30,7 @@ async function getTitle(url) {
   const matches = responseText.match(/<title(\s[^>]+)*>([^<]*)<\/title>/);
   if (matches !== null && matches.length > 1) {
     if (matches[2] != null) {
-      title = matches[2].trim();
+      title = decodeHTML(matches[2].trim());
     }
   }
 
