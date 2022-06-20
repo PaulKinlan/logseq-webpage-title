@@ -35,7 +35,7 @@ async function getTitle(url) {
   }
 
   if (title === "") {
-    logseq.UI.showMsg(`No title found for \${url}`);
+    logseq.UI.showMsg(`No title found for ${url}`);
   }
 
   return title;
@@ -48,12 +48,12 @@ async function replaceTitle(url, text, urlIndex, offset) {
     const start = text.slice(0, urlIndex);
     let linkifiedUrl = url; // If there is a new configuration option that we can't handle then just keep the URL.
     if (preferredFormat === "markdown") {
-      linkifiedUrl = `[\${title}](\${url})`;
+      linkifiedUrl = `[${title}](${url})`;
     } else if (preferredFormat === "org") {
-      linkifiedUrl = `[[\${url}][\${title}]]`;
+      linkifiedUrl = `[[${url}][${title}]]`;
     }
     const end = text.slice(urlIndex + url.length);
-    text = `\${start}\${linkifiedUrl}\${end}`;
+    text = `${start}${linkifiedUrl}${end}`;
     offset = urlIndex + url.length;
   }
   return { text, offset };
