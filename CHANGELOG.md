@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.2.3...v1.2.4) (2022-06-20)
+
+
+### Bug Fixes
+
+* **title-quote:** Correctly converts HTML encoded entries into text. ([#23](https://github.com/PaulKinlan/logseq-webpage-title/issues/23)) ([dab3abd](https://github.com/PaulKinlan/logseq-webpage-title/commit/dab3abd3ff2f36f0b3b5cd4b6d5d1c8ea595b61b))
+
 ## [1.2.3](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.2.2...v1.2.3) (2022-05-30)
 
 
