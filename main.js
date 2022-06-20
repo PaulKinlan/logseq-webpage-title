@@ -15,6 +15,9 @@ import "@logseq/libs";
 import urlRegex from "url-regex";
 
 function decodeHTML(input) {
+  if (input == undefined || input === "") {
+    return "";
+  }
   var doc = new DOMParser().parseFromString(input, "text/html");
   return doc.documentElement.textContent;
 }
