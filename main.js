@@ -64,7 +64,7 @@ const replaceAllTitle = async ({ uuid }) => {
 
   let text = content;
 
-  // Get's all the urls.
+  // Get's all the urls
   const urls = text.slice(0).match(urlRegex());
   let offset = 0;
 
