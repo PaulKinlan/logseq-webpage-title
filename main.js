@@ -161,7 +161,6 @@ function callSettings() {
           type: "string",
           default: "mod+t"
       },
-      
       {
           key: "ReplaceTitleAfter",
           title: "Replace the title after",
