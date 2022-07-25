@@ -147,70 +147,92 @@ const replaceTitleBeforeCommand = async ({ uuid }) => {
 
 function callSettings() {
   // Get settings from useSettingsSchema.
-  const settings = [{
-          key: "registerCommand",
-          type: "boolean",
-          default: true,
-          title: "Use shortcut",
-          description: "Whether or not to register in the command panel with shortcut",
-      },
-      {
-          key: "ReplaceAllTitle",
-          title: "Replace all titles",
-          description: "The keyboard shortcut at replace all titles in current block. (default: mod+t - Mac: cmd+t | Windows: ctrl+t)",
-          type: "string",
-          default: "mod+t"
-      },
-      {
-          key: "ReplaceTitleAfter",
-          title: "Replace the title after",
-          description: "The keyboard shortcut at replace the first title after cursor. (default: null)",
-          type: "string",
-          default: null
-      },
-      {
-          key: "ReplaceTitleBefore",
-          title: "Replace the title before",
-          description: "The keyboard shortcut at replace the first title before cursor. (default: null)",
-          type: "string",
-          default: null
-      }
-  ]
+  const settings = [
+    {
+      key: "registerCommand",
+      type: "boolean",
+      default: true,
+      title: "Use shortcut",
+      description:
+        "Whether or not to register in the command panel with shortcut",
+    },
+    {
+      key: "ReplaceAllTitle",
+      title: "Replace all titles",
+      description:
+        "The keyboard shortcut at replace all titles in current block. (default: mod+t - Mac: cmd+t | Windows: ctrl+t)",
+      type: "string",
+      default: "mod+t",
+    },
+    {
+      key: "ReplaceTitleAfter",
+      title: "Replace the title after",
+      description:
+        "The keyboard shortcut at replace the first title after cursor. (default: null)",
+      type: "string",
+      default: null,
+    },
+    {
+      key: "ReplaceTitleBefore",
+      title: "Replace the title before",
+      description:
+        "The keyboard shortcut at replace the first title before cursor. (default: null)",
+      type: "string",
+      default: null,
+    },
+  ];
   logseq.useSettingsSchema(settings);
 }
 
-
 function registerKeyboardShortcuts() {
   // register in command panel with shortcut.
-  if (logseq.settings.ReplaceAllTitle != null && logseq.settings.ReplaceAllTitle != "") {
-      logseq.App.registerCommandPalette({
-          key: "Title",
-          label: "Logseq-webpage-title: Replace all titles",
-          keybinding: {
-              binding: logseq.settings.ReplaceAllTitle,
-              mode: "global",
-          }
-      }, replaceAllTitle);
+  if (
+    logseq.settings.ReplaceAllTitle != null &&
+    logseq.settings.ReplaceAllTitle != ""
+  ) {
+    logseq.App.registerCommandPalette(
+      {
+        key: "Title",
+        label: "Logseq-webpage-title: Replace all titles",
+        keybinding: {
+          binding: logseq.settings.ReplaceAllTitle,
+          mode: "global",
+        },
+      },
+      replaceAllTitle
+    );
   }
-  if (logseq.settings.ReplaceTitleAfter != null && logseq.settings.ReplaceTitleAfter != "") {
-      logseq.App.registerCommandPalette({
-          key: "Title After Cursor",
-          label: "Logseq-webpage-title: Replace the title after",
-          keybinding: {
-              binding: logseq.settings.ReplaceTitleAfter,
-              mode: "global",
-          }
-      }, replaceTitleAfterCommand);
+  if (
+    logseq.settings.ReplaceTitleAfter != null &&
+    logseq.settings.ReplaceTitleAfter != ""
+  ) {
+    logseq.App.registerCommandPalette(
+      {
+        key: "Title After Cursor",
+        label: "Logseq-webpage-title: Replace the title after",
+        keybinding: {
+          binding: logseq.settings.ReplaceTitleAfter,
+          mode: "global",
+        },
+      },
+      replaceTitleAfterCommand
+    );
   }
-  if (logseq.settings.ReplaceTitleBefore != null && logseq.settings.ReplaceTitleBefore != "") {
-      logseq.App.registerCommandPalette({
-          key: "Title Before Cursor",
-          label: "Logseq-webpage-title: Replace the title before",
-          keybinding: {
-              binding: logseq.settings.ReplaceTitleBefore,
-              mode: "global",
-          }
-      }, replaceTitleBeforeCommand);
+  if (
+    logseq.settings.ReplaceTitleBefore != null &&
+    logseq.settings.ReplaceTitleBefore != ""
+  ) {
+    logseq.App.registerCommandPalette(
+      {
+        key: "Title Before Cursor",
+        label: "Logseq-webpage-title: Replace the title before",
+        keybinding: {
+          binding: logseq.settings.ReplaceTitleBefore,
+          mode: "global",
+        },
+      },
+      replaceTitleBeforeCommand
+    );
   }
 }
 
