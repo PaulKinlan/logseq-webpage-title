@@ -14,15 +14,15 @@
 import "@logseq/libs";
 import urlRegex from "url-regex";
 
-function decodeHTML(input) {
+const decodeHTML = (input) => {
   if (input == undefined || input === "") {
     return "";
   }
   const doc = new DOMParser().parseFromString(input, "text/html");
   return doc.documentElement.textContent;
-}
+};
 
-async function getTitle(url) {
+const getTitle = async (url) => {
   let title = "";
 
   const response = await fetch(url);
@@ -39,9 +39,9 @@ async function getTitle(url) {
   }
 
   return title;
-}
+};
 
-async function replaceTitle(url, text, urlIndex, offset) {
+const replaceTitle = async (url, text, urlIndex, offset) => {
   const title = await getTitle(url);
   if (title != "") {
     const { preferredFormat } = await logseq.App.getUserConfigs();
@@ -57,7 +57,7 @@ async function replaceTitle(url, text, urlIndex, offset) {
     offset = urlIndex + url.length;
   }
   return { text, offset };
-}
+};
 
 const replaceAllTitle = async ({ uuid }) => {
   const { content } = await logseq.Editor.getBlock(uuid);
@@ -145,24 +145,16 @@ const replaceTitleBeforeCommand = async ({ uuid }) => {
   }
 };
 
-function callSettings() {
+const createSettingsSchema = () => {
   // Get settings from useSettingsSchema.
-  const settings = [
-    {
-      key: "registerCommand",
-      type: "boolean",
-      default: true,
-      title: "Use shortcut",
-      description:
-        "Whether or not to register in the command panel with shortcut",
-    },
+  return logseq.useSettingsSchema([
     {
       key: "ReplaceAllTitle",
       title: "Replace all titles",
       description:
         "The keyboard shortcut at replace all titles in current block. (default: mod+t - Mac: cmd+t | Windows: ctrl+t)",
       type: "string",
-      default: "mod+t",
+      default: null,
     },
     {
       key: "ReplaceTitleAfter",
@@ -180,11 +172,17 @@ function callSettings() {
       type: "string",
       default: null,
     },
-  ];
-  logseq.useSettingsSchema(settings);
-}
+  ]);
+};
 
-function registerKeyboardShortcuts() {
+const clearKeyboardShortcuts = async (commands) => {
+  // Un-register all shortcuts commands.
+  return await this.logseq.App.unregisterPluginSimpleCommand(
+    this.logseq.baseInfo.id
+  );
+};
+
+const registerKeyboardShortcuts = (commands) => {
   // register in command panel with shortcut.
   if (
     logseq.settings.ReplaceAllTitle != null &&
@@ -234,7 +232,7 @@ function registerKeyboardShortcuts() {
       replaceTitleBeforeCommand
     );
   }
-}
+};
 
 function main() {
   logseq.Editor.registerBlockContextMenuItem(
@@ -267,17 +265,17 @@ function main() {
     "Title After Cursor",
     replaceTitleAfterCommand
   );
-
   logseq.Editor.registerSlashCommand(
     "Title Before Cursor",
     replaceTitleBeforeCommand
   );
 
-  callSettings();
-  console.log(logseq.settings);
-  if (logseq.settings.registerCommand) {
-    registerKeyboardShortcuts();
-  }
+  createSettingsSchema();
+
+  logseq.on("settings:changed", (a, b) => {
+    clearKeyboardShortcuts(a);
+    registerKeyboardShortcuts(a);
+  });
 }
 
 // bootstrap
