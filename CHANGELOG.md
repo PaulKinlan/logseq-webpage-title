@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.2.4...v1.3.0) (2022-07-26)
+
+
+### Features
+
+* **shortcuts:** Add settings shortcut-keys ([#27](https://github.com/PaulKinlan/logseq-webpage-title/issues/27)) ([4520567](https://github.com/PaulKinlan/logseq-webpage-title/commit/4520567d68b76204f5a084cc6a19f8ea39d05cb2)), closes [#25](https://github.com/PaulKinlan/logseq-webpage-title/issues/25)
+
 ## [1.2.4](https://github.com/PaulKinlan/logseq-webpage-title/compare/v1.2.3...v1.2.4) (2022-06-20)
 
 ### Bug Fixes
