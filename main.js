@@ -14,15 +14,15 @@
 import "@logseq/libs";
 import urlRegex from "url-regex";
 
-function decodeHTML(input) {
+const decodeHTML = (input) => {
   if (input == undefined || input === "") {
     return "";
   }
   const doc = new DOMParser().parseFromString(input, "text/html");
   return doc.documentElement.textContent;
-}
+};
 
-async function getTitle(url) {
+const getTitle = async (url) => {
   let title = "";
 
   const response = await fetch(url);
@@ -39,9 +39,9 @@ async function getTitle(url) {
   }
 
   return title;
-}
+};
 
-async function replaceTitle(url, text, urlIndex, offset) {
+const replaceTitle = async (url, text, urlIndex, offset) => {
   const title = await getTitle(url);
   if (title != "") {
     const { preferredFormat } = await logseq.App.getUserConfigs();
@@ -57,14 +57,14 @@ async function replaceTitle(url, text, urlIndex, offset) {
     offset = urlIndex + url.length;
   }
   return { text, offset };
-}
+};
 
 const replaceAllTitle = async ({ uuid }) => {
   const { content } = await logseq.Editor.getBlock(uuid);
 
   let text = content;
 
-  // Get's all the urls.
+  // Get's all the urls
   const urls = text.slice(0).match(urlRegex());
   let offset = 0;
 
@@ -145,6 +145,95 @@ const replaceTitleBeforeCommand = async ({ uuid }) => {
   }
 };
 
+const createSettingsSchema = () => {
+  // Get settings from useSettingsSchema.
+  return logseq.useSettingsSchema([
+    {
+      key: "ReplaceAllTitle",
+      title: "Replace all titles",
+      description:
+        "The keyboard shortcut at replace all titles in current block. (default: mod+t - Mac: cmd+t | Windows: ctrl+t)",
+      type: "string",
+      default: null,
+    },
+    {
+      key: "ReplaceTitleAfter",
+      title: "Replace the title after",
+      description:
+        "The keyboard shortcut at replace the first title after cursor. (default: null)",
+      type: "string",
+      default: null,
+    },
+    {
+      key: "ReplaceTitleBefore",
+      title: "Replace the title before",
+      description:
+        "The keyboard shortcut at replace the first title before cursor. (default: null)",
+      type: "string",
+      default: null,
+    },
+  ]);
+};
+
+const clearKeyboardShortcuts = async (commands) => {
+  // Un-register all shortcuts commands.
+  return await this.logseq.App.unregisterPluginSimpleCommand(
+    this.logseq.baseInfo.id
+  );
+};
+
+const registerKeyboardShortcuts = (commands) => {
+  // register in command panel with shortcut.
+  if (
+    logseq.settings.ReplaceAllTitle != null &&
+    logseq.settings.ReplaceAllTitle != ""
+  ) {
+    logseq.App.registerCommandPalette(
+      {
+        key: "Title",
+        label: "Logseq-webpage-title: Replace all titles",
+        keybinding: {
+          binding: logseq.settings.ReplaceAllTitle,
+          mode: "global",
+        },
+      },
+      replaceAllTitle
+    );
+  }
+  if (
+    logseq.settings.ReplaceTitleAfter != null &&
+    logseq.settings.ReplaceTitleAfter != ""
+  ) {
+    logseq.App.registerCommandPalette(
+      {
+        key: "Title After Cursor",
+        label: "Logseq-webpage-title: Replace the title after",
+        keybinding: {
+          binding: logseq.settings.ReplaceTitleAfter,
+          mode: "global",
+        },
+      },
+      replaceTitleAfterCommand
+    );
+  }
+  if (
+    logseq.settings.ReplaceTitleBefore != null &&
+    logseq.settings.ReplaceTitleBefore != ""
+  ) {
+    logseq.App.registerCommandPalette(
+      {
+        key: "Title Before Cursor",
+        label: "Logseq-webpage-title: Replace the title before",
+        keybinding: {
+          binding: logseq.settings.ReplaceTitleBefore,
+          mode: "global",
+        },
+      },
+      replaceTitleBeforeCommand
+    );
+  }
+};
+
 function main() {
   logseq.Editor.registerBlockContextMenuItem(
     "Get Link Titles",
@@ -176,11 +265,17 @@ function main() {
     "Title After Cursor",
     replaceTitleAfterCommand
   );
-
   logseq.Editor.registerSlashCommand(
     "Title Before Cursor",
     replaceTitleBeforeCommand
   );
+
+  createSettingsSchema();
+
+  logseq.on("settings:changed", (a, b) => {
+    clearKeyboardShortcuts(a);
+    registerKeyboardShortcuts(a);
+  });
 }
 
 // bootstrap

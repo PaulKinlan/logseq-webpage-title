@@ -2,8 +2,10 @@
   "name": "logseq-webpage-title",
   "version": "1.2.4",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
+    "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
+    "prepare": "husky install",
     "preview": "vite preview"
   },
   "main": "dist/index.html",
@@ -14,6 +16,8 @@
     "@semantic-release/git": "10.0.1",
     "@semantic-release/npm": "9.0.1",
     "conventional-changelog-conventionalcommits": "4.6.3",
+    "husky": "^7.0.0",
+    "prettier": "^2.4.1",
     "semantic-release": "19.0.3",
     "vite": "^2.9.5"
   },
