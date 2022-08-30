@@ -19,7 +19,7 @@
     "husky": "^7.0.0",
     "prettier": "^2.4.1",
     "semantic-release": "19.0.3",
-    "vite": "^2.9.5"
+    "vite": "^2.9.13"
   },
   "logseq": {
     "id": "kinlan_webpage_title-im3ruv4ub"
